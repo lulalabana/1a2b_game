@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1A2B Number Guessing Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .game-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 200px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #message {
+            color: #e74c3c;
+            height: 30px;
+        }
+        #guessHistory {
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            background-color: #f1f5f9;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>1A2B Number Guessing Game</h1>
+        <input type="text" id="guessInput" maxlength="4" placeholder="Enter 4 unique digits">
+        <button onclick="checkGuess()">Guess!</button>
+        <p id="message"></p>
+        <div id="guessHistory"></div>
+    </div>
+
+    <script>
+        let targetNumber = '';
+        let attempts = 0;
+
+        function generateTargetNumber() {
+            targetNumber = '1920'
+        }
+
+        function checkGuess() {
+            const guessInput = document.getElementById('guessInput');
+            const message = document.getElementById('message');
+            const guessHistory = document.getElementById('guessHistory');
+            const guess = guessInput.value;
+
+            // Validate input
+            if (guess.length !== 4 || new Set(guess).size !== 4) {
+                message.textContent = 'Please enter 4 unique digits';
+                return;
+            }
+
+            attempts++;
+            let a = 0, b = 0;
+
+            // Calculate 1A2B
+            for (let i = 0; i < 4; i++) {
+                if (guess[i] === targetNumber[i]) {
+                    a++;
+                } else if (targetNumber.includes(guess[i])) {
+                    b++;
+                }
+            }
+
+            // Update guess history
+            const result = `Attempt ${attempts}: ${guess} → ${a}A${b}B`;
+            guessHistory.innerHTML = result + '<br>' + guessHistory.innerHTML;
+
+            // Check if guess is correct
+            if (a === 4) {
+                message.textContent = `Congratulations! You guessed the number in ${attempts} attempts`;
+                guessInput.disabled = true;
+            } else {
+                message.textContent = `${a}A${b}B`;
+            }
+
+            guessInput.value = '';
+        }
+
+        // Initialize game
+        generateTargetNumber();
+    </script>
+</body>
+</html>
